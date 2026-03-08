@@ -1,0 +1,233 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <title>bober</title>
+
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+                height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                color: #fff;
+                background: #000;
+            }
+
+            .enter-screen {
+                position: fixed;
+                inset: 0;
+                background: #000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10;
+                transition: opacity 0.8s ease;
+            }
+
+            .enter-screen.hidden {
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            .enter-btn {
+                font-size: 22px;
+                opacity: 0.85;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+
+            .enter-btn:hover {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+
+            .bg {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 0;
+                overflow: hidden;
+            }
+
+            .bg video {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                z-index: 1;
+            }
+
+            .bg-fallback {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background:
+                    url("bg.png") center/cover no-repeat,
+                    #000;
+                z-index: 0;
+            }
+
+            .overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.45);
+                z-index: 1;
+            }
+
+            .card {
+                position: relative;
+                z-index: 2;
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                opacity: 0;
+                transform: translateY(10px);
+                transition:
+                    opacity 0.9s ease,
+                    transform 0.9s ease;
+            }
+
+            .card.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .avatar {
+                width: 72px;
+                height: 72px;
+                border-radius: 50%;
+                overflow: hidden;
+                background: #ddd;
+            }
+
+            .avatar img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .info {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .name-row {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .username {
+                font-size: 18px;
+                font-weight: 500;
+            }
+
+            .badge img {
+                height: 16px;
+                position: relative;
+                top: 2px;
+            }
+
+            .bio {
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.75);
+            }
+
+            .meta {
+                margin-top: 6px;
+                font-size: 12px;
+                color: rgba(255, 255, 255, 0.6);
+                display: flex;
+                gap: 6px;
+                align-items: center;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="enter-screen" id="enterScreen">
+            <div class="enter-btn" id="enterBtn">enter &gt;.&lt;</div>
+        </div>
+
+        <div class="bg">
+            <video id="bgVideo" muted loop playsinline preload="auto">
+                <source src="bg.mp4" type="video/mp4" />
+            </video>
+
+            <div class="bg-fallback"></div>
+        </div>
+
+        <div class="overlay"></div>
+
+        <audio id="bgMusic" loop>
+            <source src="music.mp3" type="audio/mpeg" />
+        </audio>
+
+        <div class="card" id="card">
+            <div class="avatar">
+                <img src="avatar.png" />
+            </div>
+
+            <div class="info">
+                <div class="name-row">
+                    <span class="username">bober</span>
+
+                    <span class="badge">
+                        <img src="hello-kitty.png" />
+                    </span>
+                </div>
+
+                <div class="bio">somewhere in the internet</div>
+
+                <div class="meta">
+                    <span>? views</span>
+                    <span>•</span>
+                    <span>mov eax, -1</span>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const enter = document.getElementById("enterScreen");
+            const btn = document.getElementById("enterBtn");
+            const card = document.getElementById("card");
+            const music = document.getElementById("bgMusic");
+            const video = document.getElementById("bgVideo");
+
+            btn.onclick = () => {
+                enter.classList.add("hidden");
+
+                card.classList.add("show");
+
+                video.muted = true;
+                video.play().catch(() => {});
+
+                music.volume = 0.6;
+                music.play().catch(() => {});
+            };
+
+            video.addEventListener("error", () => {
+                video.style.display = "none";
+            });
+        </script>
+    </body>
+</html>
